@@ -56,12 +56,36 @@
 			children = (
 				57E9BD7B2CBFC18E0073B8DE /* AppDelegate.swift */,
 				57E9BD7D2CBFC18E0073B8DE /* SceneDelegate.swift */,
-				57E9BD7F2CBFC18E0073B8DE /* ViewController.swift */,
+				57E9BD8F2CBFC6240073B8DE /* View */,
+				57E9BD912CBFC6350073B8DE /* Model */,
+				57E9BD902CBFC62C0073B8DE /* ViewModel */,
 				57E9BD842CBFC1910073B8DE /* Assets.xcassets */,
 				57E9BD862CBFC1910073B8DE /* LaunchScreen.storyboard */,
 				57E9BD892CBFC1910073B8DE /* Info.plist */,
 			);
 			path = OpenWeather;
+			sourceTree = "<group>";
+		};
+		57E9BD8F2CBFC6240073B8DE /* View */ = {
+			isa = PBXGroup;
+			children = (
+				57E9BD7F2CBFC18E0073B8DE /* ViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		57E9BD902CBFC62C0073B8DE /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		57E9BD912CBFC6350073B8DE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
