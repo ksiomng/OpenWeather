@@ -17,11 +17,17 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
         return image
     }()
     
+    lazy var topView: UIView = {
+       let view = UIView()
+        return view
+    }()
+    
     lazy var textView: UITextView = {
         let text = UITextView()
         text.text = "Seoul"
         text.translatesAutoresizingMaskIntoConstraints = false
         text.backgroundColor = .clear
+        text.textColor = .white
         text.font = UIFont.systemFont(ofSize: 40)
         text.textAlignment = .center
         return text
@@ -76,7 +82,15 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
         searchController.searchResultsUpdater = self
         searchController.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search Cities"
+        searchController.searchBar.placeholder = "Search"
+        
+        // 텍스트 필드에 접근하여 배경색 및 텍스트 색 설정
+        if let textField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
+            textField.backgroundColor = UIColor.white.withAlphaComponent(0.5) // 50% 투명한 검정색
+            textField.textColor = UIColor.white // 텍스트 색상 설정
+            textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "", attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray]) // 플레이스홀더 색상 설정
+        }
+        
         navigationItem.searchController = searchController
         definesPresentationContext = true
     }
@@ -111,11 +125,15 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cityCell")
         cell.textLabel?.text = filteredCities[indexPath.row]
+        cell.textLabel?.textColor = .white
         cell.backgroundColor = UIColor.clear
         return cell
     }
-
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100 // 원하는 셀 높이
+    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCity = filteredCities[indexPath.row]
         print("Selected city: \(selectedCity)")
