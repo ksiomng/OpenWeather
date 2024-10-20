@@ -214,7 +214,7 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfFilteredCities()
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cityCell")
         let city = viewModel.filteredCities[indexPath.row]
@@ -233,5 +233,33 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCity = viewModel.selectedCity(at: indexPath.row)
         print("Selected city: \(selectedCity.name), coord: \(selectedCity.coord)")
+        
+        if let searchController = navigationItem.searchController {
+            searchController.isActive = false
+        }
+        
+        fetchWeather(for: selectedCity)
+    }
+
+    private func fetchWeather(for city: City) {
+        viewModel.fetchWeather(for: city) { [weak self] result in
+            switch result {
+            case .success(let weatherResponse):
+                DispatchQueue.main.async {
+                    self?.updateWeatherDisplay(with: weatherResponse)
+                }
+            case .failure(let error):
+                print("Failed to fetch weather data: \(error)")
+            }
+        }
+    }
+
+    private func updateWeatherDisplay(with weatherResponse: WeatherResponse) {
+        let city = weatherResponse.city.name
+        let temperature = String(format: "%.1f°", weatherResponse.list.first?.main.temp ?? 0 - 273.15)
+        let weatherDescription = weatherResponse.list.first?.weather.first?.description ?? ""
+        let maxMinTemp = "최고: \(weatherResponse.list.first?.main.temp_max ?? 0)  | 최저:  \(weatherResponse.list.first?.main.temp_min ?? 0)"
+        
+        weatherDisplayView.updateWeatherInfo(city: city, temperature: temperature, weatherDescription: weatherDescription, maxMinTemp: maxMinTemp)
     }
 }
