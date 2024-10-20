@@ -7,68 +7,6 @@
 
 import UIKit
 
-class HourlyWeatherScrollItemView: UIView {
-    
-    private let iconImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-    
-    private let timeLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 12)
-        return label
-    }()
-    
-    private let temperatureLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 15)
-        return label
-    }()
-    
-    init(image: UIImage?, title: String, subtitle: String) {
-        super.init(frame: .zero)
-        iconImageView.image = image
-        timeLabel.text = title
-        temperatureLabel.text = subtitle
-        setupViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupViews() {
-        addSubview(timeLabel)
-        addSubview(iconImageView)
-        addSubview(temperatureLabel)
-
-        let itemWidth: CGFloat = 60
-        NSLayoutConstraint.activate([
-            self.widthAnchor.constraint(equalToConstant: itemWidth),
-            
-            timeLabel.topAnchor.constraint(equalTo: self.topAnchor),
-            timeLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-
-            iconImageView.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 5),
-            iconImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            iconImageView.widthAnchor.constraint(equalToConstant: 30),
-            iconImageView.heightAnchor.constraint(equalToConstant: 30),
-
-            temperatureLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 7),
-            temperatureLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            temperatureLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
-    }
-}
-
 class HourlyWeatherScrollView: UIView {
     lazy var view: UIView = {
         let view = UIView()
@@ -158,8 +96,69 @@ class HourlyWeatherScrollView: UIView {
     }
     
     func addItem(image: UIImage?, title: String, subtitle: String) {
-        let item = HourlyWeatherScrollItemView(image: image, title: title, subtitle: subtitle)
+        let item = HourlyWeatherScrollViewCell(image: image, title: title, subtitle: subtitle)
         stackView.addArrangedSubview(item)
     }
 }
 
+class HourlyWeatherScrollViewCell: UIView {
+    
+    private let iconImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    private let timeLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 12)
+        return label
+    }()
+    
+    private let temperatureLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 15)
+        return label
+    }()
+    
+    init(image: UIImage?, title: String, subtitle: String) {
+        super.init(frame: .zero)
+        iconImageView.image = image
+        timeLabel.text = title
+        temperatureLabel.text = subtitle
+        setupViews()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupViews() {
+        addSubview(timeLabel)
+        addSubview(iconImageView)
+        addSubview(temperatureLabel)
+
+        let itemWidth: CGFloat = 60
+        NSLayoutConstraint.activate([
+            self.widthAnchor.constraint(equalToConstant: itemWidth),
+            
+            timeLabel.topAnchor.constraint(equalTo: self.topAnchor),
+            timeLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+
+            iconImageView.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 5),
+            iconImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            iconImageView.widthAnchor.constraint(equalToConstant: 30),
+            iconImageView.heightAnchor.constraint(equalToConstant: 30),
+
+            temperatureLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 7),
+            temperatureLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            temperatureLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+    }
+}
