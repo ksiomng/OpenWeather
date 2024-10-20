@@ -28,7 +28,7 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
     }()
 
     lazy var mainView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [weatherDisplayView, horizontalScrollView, fiveDayWeatherView, precipitationMapContainer])
+        let stackView = UIStackView(arrangedSubviews: [weatherDisplayView, horizontalScrollView, fiveDayWeatherView, precipitationMapContainer, weatherInfoStackView])
         stackView.axis = .vertical
         stackView.spacing = 20
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -93,6 +93,12 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
         mapView.mapType = .standard
         addPrecipitationOverlay(to: mapView)
         return mapView
+    }()
+    
+    lazy var weatherInfoStackView: UIView = {
+        let view = WeatherInfoStackView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
 
     override func viewDidLoad() {
@@ -173,7 +179,12 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
             precipitationMapContainer.topAnchor.constraint(equalTo: fiveDayWeatherView.bottomAnchor, constant: 20),
             precipitationMapContainer.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 20),
             precipitationMapContainer.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -20),
-            precipitationMapContainer.heightAnchor.constraint(equalToConstant: 350)
+            precipitationMapContainer.heightAnchor.constraint(equalToConstant: 350),
+            
+            weatherInfoStackView.topAnchor.constraint(equalTo: precipitationMapContainer.bottomAnchor, constant: 20),
+            weatherInfoStackView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 20),
+            weatherInfoStackView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -20),
+            weatherInfoStackView.heightAnchor.constraint(equalToConstant: 350),
         ])
 
         NSLayoutConstraint.activate([
