@@ -99,6 +99,9 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
             let cell = FiveDayWeatherViewCell(image: image, date: date, minTemp: minTemp, maxTemp: maxTemp)
             fiveDayWeatherView.addCell(cell)
         }
+        
+        let client_id = Bundle.main.infoDictionary?["API_KEY"] as? String ?? ""
+        print(client_id)
     }
     
     private func setupViews() {
