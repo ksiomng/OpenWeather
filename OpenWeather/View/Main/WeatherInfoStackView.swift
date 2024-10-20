@@ -20,7 +20,6 @@ class WeatherInfoStackView: UIView {
     
     private let humidityValueLabel: UILabel = {
         let label = UILabel()
-        label.text = "50%"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 30)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -46,7 +45,6 @@ class WeatherInfoStackView: UIView {
     
     private let cloudCoverageValueLabel: UILabel = {
         let label = UILabel()
-        label.text = "75%"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 30)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -72,7 +70,6 @@ class WeatherInfoStackView: UIView {
     
     private let windSpeedValueLabel: UILabel = {
         let label = UILabel()
-        label.text = "15 km/h"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 30)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -113,14 +110,17 @@ class WeatherInfoStackView: UIView {
         return view
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(humidity: String, cloudCoverage: String, windSpeed: String, pressure: String) {
+        super.init(frame: .zero)
+        humidityValueLabel.text = humidity
+        cloudCoverageValueLabel.text = cloudCoverage
+        windSpeedValueLabel.text = windSpeed
+        pressureValueLabel.text = pressure
         setupViews()
     }
-    
+
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupViews()
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func setupViews() {
