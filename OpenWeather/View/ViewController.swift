@@ -40,6 +40,14 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
         return scrollView
     }()
     
+    lazy var fiveDayWeatherView: FiveDayWeatherView = {
+        let view = FiveDayWeatherView()
+        view.backgroundColor = UIColor(named: "backgroundColor")
+        view.layer.cornerRadius = 10
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,6 +66,15 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
             let image = UIImage(named: "01d")
             horizontalScrollView.addItem(image: image, title: title, subtitle: subtitle)
         }
+        
+        for i in 1...5 {
+            let date = "Day \(i)"
+            let minTemp = "\(10 - i)°"
+            let maxTemp = "\(15 - i)°"
+            let image = UIImage(named: "01d")
+            let cell = FiveDayWeatherViewCell(image: image, date: date, minTemp: minTemp, maxTemp: maxTemp)
+            fiveDayWeatherView.addCell(cell)
+        }
     }
     
     private func setupViews() {
@@ -74,6 +91,7 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
         view.addSubview(mainView)
         mainView.addSubview(weatherDisplayView)
         mainView.addSubview(horizontalScrollView)
+        mainView.addSubview(fiveDayWeatherView)
         
         NSLayoutConstraint.activate([
             weatherDisplayView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -81,11 +99,15 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
             weatherDisplayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
             horizontalScrollView.topAnchor.constraint(equalTo: weatherDisplayView.bottomAnchor, constant: 20),
-            horizontalScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            horizontalScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            horizontalScrollView.leadingAnchor.constraint(equalTo: weatherDisplayView.leadingAnchor),
+            horizontalScrollView.trailingAnchor.constraint(equalTo: weatherDisplayView.trailingAnchor),
             horizontalScrollView.heightAnchor.constraint(equalToConstant: 120),
+            
+            fiveDayWeatherView.topAnchor.constraint(equalTo: horizontalScrollView.bottomAnchor, constant: 20),
+            fiveDayWeatherView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            fiveDayWeatherView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
-
+        
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.topAnchor),
             imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
