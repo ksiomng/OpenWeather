@@ -9,12 +9,11 @@ import UIKit
 
 class WeatherInfoStackView: UIView {
     
-    // MARK: - Humidity View
     private let humidityTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "습도"
         label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -23,7 +22,7 @@ class WeatherInfoStackView: UIView {
         let label = UILabel()
         label.text = "50%"
         label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 30)
+        label.font = UIFont.systemFont(ofSize: 30)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -36,12 +35,11 @@ class WeatherInfoStackView: UIView {
         return view
     }()
     
-    // MARK: - Cloud Coverage View
     private let cloudCoverageTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "구름"
         label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -50,7 +48,7 @@ class WeatherInfoStackView: UIView {
         let label = UILabel()
         label.text = "75%"
         label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 30)
+        label.font = UIFont.systemFont(ofSize: 30)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -63,12 +61,11 @@ class WeatherInfoStackView: UIView {
         return view
     }()
     
-    // MARK: - Wind Speed View
     private let windSpeedTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "바람 속도"
         label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -77,7 +74,7 @@ class WeatherInfoStackView: UIView {
         let label = UILabel()
         label.text = "15 km/h"
         label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 30)
+        label.font = UIFont.systemFont(ofSize: 30)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -90,12 +87,11 @@ class WeatherInfoStackView: UIView {
         return view
     }()
     
-    // MARK: - Pressure View
     private let pressureTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "기압"
         label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -104,7 +100,7 @@ class WeatherInfoStackView: UIView {
         let label = UILabel()
         label.text = "1015 hPa"
         label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 30)
+        label.font = UIFont.systemFont(ofSize: 30)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -117,7 +113,6 @@ class WeatherInfoStackView: UIView {
         return view
     }()
     
-    // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -128,31 +123,24 @@ class WeatherInfoStackView: UIView {
         setupViews()
     }
     
-    // MARK: - Setup Views
     private func setupViews() {
-        // Add humidity labels to the HumidityView
         HumidityView.addSubview(humidityTitleLabel)
         HumidityView.addSubview(humidityValueLabel)
         
-        // Add cloud coverage labels to the CloudCoverageView
         CloudCoverageView.addSubview(cloudCoverageTitleLabel)
         CloudCoverageView.addSubview(cloudCoverageValueLabel)
         
-        // Add wind speed labels to the WindSpeedView
         WindSpeedView.addSubview(windSpeedTitleLabel)
         WindSpeedView.addSubview(windSpeedValueLabel)
-        
-        // Add pressure labels to the PressureView
+
         PressureView.addSubview(pressureTitleLabel)
         PressureView.addSubview(pressureValueLabel)
         
-        // Add all views to the stack
         addSubview(HumidityView)
         addSubview(CloudCoverageView)
         addSubview(WindSpeedView)
         addSubview(PressureView)
         
-        // Layout constraints for the views and labels
         NSLayoutConstraint.activate([
             HumidityView.topAnchor.constraint(equalTo: self.topAnchor),
             HumidityView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
