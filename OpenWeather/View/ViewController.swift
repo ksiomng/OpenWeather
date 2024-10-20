@@ -100,8 +100,7 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
             fiveDayWeatherView.addCell(cell)
         }
         
-        let client_id = Bundle.main.infoDictionary?["API_KEY"] as? String ?? ""
-        print(client_id)
+        tableView.reloadData()
     }
     
     private func setupViews() {
@@ -215,11 +214,14 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfFilteredCities()
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "cityCell")
-        cell.textLabel?.text = viewModel.filteredCities[indexPath.row]
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cityCell")
+        let city = viewModel.filteredCities[indexPath.row]
+        cell.textLabel?.text = city.name
+        cell.detailTextLabel?.text = city.country
         cell.textLabel?.textColor = .white
+        cell.detailTextLabel?.textColor = .lightGray
         cell.backgroundColor = UIColor(named: "backgroundColor")
         return cell
     }
@@ -230,6 +232,6 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCity = viewModel.selectedCity(at: indexPath.row)
-        print("Selected city: \(selectedCity)")
+        print("Selected city: \(selectedCity.name), coord: \(selectedCity.coord)")
     }
 }
