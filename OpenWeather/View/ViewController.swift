@@ -227,8 +227,6 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCity = viewModel.selectedCity(at: indexPath.row)
-        print("Selected city: \(selectedCity.name), coord: \(selectedCity.coord)")
-        
         if let searchController = navigationItem.searchController {
             searchController.isActive = false
         }

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5703CCD12CC4E95A00C51B8C /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5703CCD02CC4E95A00C51B8C /* WeatherViewModel.swift */; };
-		5703CCD32CC4EB5500C51B8C /* extension+UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5703CCD22CC4EB5500C51B8C /* extension+UIImage.swift */; };
 		5703CCD62CC4FB8400C51B8C /* WeatherDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5703CCD52CC4FB8400C51B8C /* WeatherDisplayView.swift */; };
 		5703CCD92CC516A700C51B8C /* HourlyWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5703CCD82CC516A700C51B8C /* HourlyWeatherView.swift */; };
 		5703CCDF2CC55F8D00C51B8C /* FiveDayWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5703CCDE2CC55F8D00C51B8C /* FiveDayWeatherView.swift */; };
@@ -27,7 +26,6 @@
 
 /* Begin PBXFileReference section */
 		5703CCD02CC4E95A00C51B8C /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
-		5703CCD22CC4EB5500C51B8C /* extension+UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension+UIImage.swift"; sourceTree = "<group>"; };
 		5703CCD52CC4FB8400C51B8C /* WeatherDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDisplayView.swift; sourceTree = "<group>"; };
 		5703CCD82CC516A700C51B8C /* HourlyWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherView.swift; sourceTree = "<group>"; };
 		5703CCDE2CC55F8D00C51B8C /* FiveDayWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiveDayWeatherView.swift; sourceTree = "<group>"; };
@@ -117,7 +115,6 @@
 				57C35C5E2CC5BE130083A346 /* citylist.json */,
 				57C35C582CC5B9F20083A346 /* Secrets.xcconfig */,
 				5703CCD42CC4EC6E00C51B8C /* App */,
-				5703CCD22CC4EB5500C51B8C /* extension+UIImage.swift */,
 				5703CCCF2CC4E93A00C51B8C /* ViewModel */,
 				57C35C602CC5BE1A0083A346 /* Model */,
 				57E9BD8F2CBFC6240073B8DE /* View */,
@@ -216,7 +213,6 @@
 				5703CCD62CC4FB8400C51B8C /* WeatherDisplayView.swift in Sources */,
 				57E9BD7C2CBFC18E0073B8DE /* AppDelegate.swift in Sources */,
 				57C35C572CC5B2D00083A346 /* PrecipitationMapView.swift in Sources */,
-				5703CCD32CC4EB5500C51B8C /* extension+UIImage.swift in Sources */,
 				57C35C5D2CC5BD670083A346 /* City.swift in Sources */,
 				5703CCDF2CC55F8D00C51B8C /* FiveDayWeatherView.swift in Sources */,
 				57E9BD7E2CBFC18E0073B8DE /* SceneDelegate.swift in Sources */,
