@@ -61,13 +61,8 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
         return view
     }()
     
-    lazy var weatherInfoStackView: UIView = {
-        let humidity = "60%"
-        let cloudCoverage = "20%"
-        let windSpeed = "15 km/h"
-        let pressure = "1015 hPa"
-        
-        let view = WeatherInfoStackView(humidity: humidity, cloudCoverage: cloudCoverage, windSpeed: windSpeed, pressure: pressure)
+    lazy var weatherInfoStackView: WeatherInfoStackView = {
+        let view = WeatherInfoStackView(humidity: "50%", cloudCoverage: "20%", windSpeed: "10 km/h", pressure: "1013 hPa")
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -240,7 +235,7 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
         
         fetchWeather(for: selectedCity)
     }
-
+    
     private func fetchWeather(for city: City) {
         viewModel.fetchWeather(for: city) { [weak self] result in
             switch result {
@@ -253,13 +248,24 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
             }
         }
     }
-
+    
     private func updateWeatherDisplay(with weatherResponse: WeatherResponse) {
-        let city = weatherResponse.city.name
-        let temperature = String(format: "%.1f°", weatherResponse.list.first?.main.temp ?? 0 - 273.15)
-        let weatherDescription = weatherResponse.list.first?.weather.first?.description ?? ""
-        let maxMinTemp = "최고: \(weatherResponse.list.first?.main.temp_max ?? 0)  | 최저:  \(weatherResponse.list.first?.main.temp_min ?? 0)"
+        let city = weatherResponse.name
+        let temperature = String(format: "%.1f°", weatherResponse.main.temp - 273.15)
+        let weatherDescription = weatherResponse.weather.first?.description ?? ""
+        let maxMinTemp = "최고: \(String(format: "%.2f°", weatherResponse.main.temp_max - 273.15)) | 최저: \(String(format: "%.2f°", weatherResponse.main.temp_min - 273.15))"
         
         weatherDisplayView.updateWeatherInfo(city: city, temperature: temperature, weatherDescription: weatherDescription, maxMinTemp: maxMinTemp)
+        
+        let humidity = "\(weatherResponse.main.humidity) %"
+        let cloudCoverage = "\(weatherResponse.clouds.all) %"
+        let windSpeed = "\(weatherResponse.wind.speed) km/h"
+        let pressure = "\(weatherResponse.main.pressure) hPa"
+        
+        self.weatherInfoStackView.updateValues(humidity: humidity, cloudCoverage: cloudCoverage, windSpeed: windSpeed, pressure: pressure)
+        
+        if let precipitationMapView = mainView.subviews.compactMap({ $0 as? PrecipitationMapView }).first {
+            precipitationMapView.centerMapOnCoordinates(latitude: weatherResponse.coord.lat, longitude: weatherResponse.coord.lon)
+        }
     }
 }

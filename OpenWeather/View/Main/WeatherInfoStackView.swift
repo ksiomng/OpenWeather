@@ -112,10 +112,6 @@ class WeatherInfoStackView: UIView {
     
     init(humidity: String, cloudCoverage: String, windSpeed: String, pressure: String) {
         super.init(frame: .zero)
-        humidityValueLabel.text = humidity
-        cloudCoverageValueLabel.text = cloudCoverage
-        windSpeedValueLabel.text = windSpeed
-        pressureValueLabel.text = pressure
         setupViews()
     }
 
@@ -186,5 +182,12 @@ class WeatherInfoStackView: UIView {
             pressureValueLabel.topAnchor.constraint(equalTo: pressureTitleLabel.bottomAnchor, constant: 40),
             pressureValueLabel.leadingAnchor.constraint(equalTo: PressureView.leadingAnchor, constant: 10),
         ])
+    }
+    
+    func updateValues(humidity: String, cloudCoverage: String, windSpeed: String, pressure: String) {
+        humidityValueLabel.text = humidity
+        cloudCoverageValueLabel.text = cloudCoverage
+        windSpeedValueLabel.text = windSpeed
+        pressureValueLabel.text = pressure
     }
 }

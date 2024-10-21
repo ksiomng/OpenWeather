@@ -8,23 +8,20 @@
 import Foundation
 
 struct WeatherResponse: Codable {
-    let cod: Int // Change from String to Int
-    let message: String?
-    let city: City
-    let list: [WeatherData]
-}
-
-struct WeatherData: Codable {
-    let dt: Int
-    let main: MainWeatherData
+    let coord: Place
+    let name: String // Replace city with name
     let weather: [Weather]
+    let main: MainWeatherData
     let clouds: Clouds
     let wind: Wind
-    let visibility: Int
-    let pop: Double
-    let rain: Rain?
     let sys: Sys
-    let dt_txt: String
+    let dt: Int
+    let visibility: Int
+}
+
+struct Place: Codable {
+    let lon: Double
+    let lat: Double
 }
 
 struct MainWeatherData: Codable {
@@ -53,30 +50,7 @@ struct Wind: Codable {
     let gust: Double
 }
 
-struct Rain: Codable {
-    let threeHour: Double
-
-    enum CodingKeys: String, CodingKey {
-        case threeHour = "3h"
-    }
-}
-
 struct Sys: Codable {
-    let pod: String
-}
-
-struct CityData: Codable {
-    let id: Int
-    let name: String
-    let coord: Coordinates
-    let country: String
-    let population: Int
-    let timezone: Int
     let sunrise: Int
     let sunset: Int
-}
-
-struct Coordinates: Codable {
-    let lat: Double
-    let lon: Double
 }
