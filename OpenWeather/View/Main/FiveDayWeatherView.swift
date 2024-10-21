@@ -57,6 +57,13 @@ class FiveDayWeatherView: UIView {
     func addCell(_ cell: FiveDayWeatherViewCell) {
         stackView.addArrangedSubview(cell)
     }
+    
+    func clearItems() {
+        stackView.arrangedSubviews.forEach { subview in
+            stackView.removeArrangedSubview(subview)
+            subview.removeFromSuperview()
+        }
+    }
 }
 
 class FiveDayWeatherViewCell: UIView {

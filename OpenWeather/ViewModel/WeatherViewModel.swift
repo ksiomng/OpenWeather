@@ -27,7 +27,7 @@ class WeatherViewModel {
         do {
             let data = try Data(contentsOf: url)
             cities = try JSONDecoder().decode([City].self, from: data)
-            print("Loaded cities: \(cities)")
+            print("Loaded cities: \(cities.count)")
         } catch {
             print("Error loading cities: \(error)")
         }
@@ -50,39 +50,42 @@ class WeatherViewModel {
     }
     
     func fetchWeather(for city: City, completion: @escaping (Result<WeatherResponse, Error>) -> Void) {
-            guard let apiKey = apiKey else {
-                print("API key not found.")
-                completion(.failure(NSError(domain: "API key missing", code: -1, userInfo: nil)))
-                return
-            }
-            
-            let latitude = city.coord.lat
-            let longitude = city.coord.lon
-            let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=\(apiKey)"
-            
-            guard let url = URL(string: urlString) else {
-                print("Invalid URL.")
-                return
-            }
-            
-            let task = URLSession.shared.dataTask(with: url) { data, response, error in
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-                
-                guard let data = data else {
-                    completion(.failure(NSError(domain: "No data received", code: -1, userInfo: nil)))
-                    return
-                }
-                
-                do {
-                    let weatherResponse = try JSONDecoder().decode(WeatherResponse.self, from: data)
-                    completion(.success(weatherResponse))
-                } catch {
-                    completion(.failure(error))
-                }
-            }
-            task.resume()
+        guard let apiKey = apiKey else {
+            print("API key not found.")
+            completion(.failure(NSError(domain: "API key missing", code: -1, userInfo: nil)))
+            return
         }
+        
+        let latitude = city.coord.lat
+        let longitude = city.coord.lon
+        let urlString = "https://api.openweathermap.org/data/2.5/forecast?lat=\(latitude)&lon=\(longitude)&appid=\(apiKey)"
+        
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL.")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Network error: \(error.localizedDescription)")
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = data else {
+                print("No data received.")
+                completion(.failure(NSError(domain: "No data received", code: -1, userInfo: nil)))
+                return
+            }
+            
+            do {
+                let weatherResponse = try JSONDecoder().decode(WeatherResponse.self, from: data)
+                completion(.success(weatherResponse))
+            } catch {
+                print("Error decoding weather response: \(error)")
+                completion(.failure(error))
+            }
+        }
+        task.resume()
+    }
 }

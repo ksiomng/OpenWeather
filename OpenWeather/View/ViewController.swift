@@ -79,7 +79,7 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
         let maxMinTemp = "최고: -1°  | 최저: -11°"
         weatherDisplayView.updateWeatherInfo(city: city, temperature: temperature, weatherDescription: weatherDescription, maxMinTemp: maxMinTemp)
         
-        for i in 1...10 {
+        for i in 1...16 {
             let title = "Item \(i)"
             let subtitle = "\(i)°"
             let image = UIImage(named: "01d")
@@ -230,7 +230,6 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
         if let searchController = navigationItem.searchController {
             searchController.isActive = false
         }
-        
         fetchWeather(for: selectedCity)
     }
     
@@ -248,22 +247,60 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
     }
     
     private func updateWeatherDisplay(with weatherResponse: WeatherResponse) {
-        let city = weatherResponse.name
-        let temperature = String(format: "%.1f°", weatherResponse.main.temp - 273.15)
-        let weatherDescription = weatherResponse.weather.first?.description ?? ""
-        let maxMinTemp = "최고: \(String(format: "%.2f°", weatherResponse.main.temp_max - 273.15)) | 최저: \(String(format: "%.2f°", weatherResponse.main.temp_min - 273.15))"
+        guard let weatherData = weatherResponse.list.first else {
+            print("No weather data available.")
+            return
+        }
+        
+        let city = weatherResponse.city.name
+        let temperature = String(format: "%.1f°", weatherData.main.temp - 273.15)
+        let weatherDescription = weatherData.weather.first?.description ?? ""
+        let maxMinTemp = "최고: \(String(format: "%.2f°", weatherData.main.temp_max - 273.15)) | 최저: \(String(format: "%.2f°", weatherData.main.temp_min - 273.15))"
         
         weatherDisplayView.updateWeatherInfo(city: city, temperature: temperature, weatherDescription: weatherDescription, maxMinTemp: maxMinTemp)
         
-        let humidity = "\(weatherResponse.main.humidity) %"
-        let cloudCoverage = "\(weatherResponse.clouds.all) %"
-        let windSpeed = "\(weatherResponse.wind.speed) km/h"
-        let pressure = "\(weatherResponse.main.pressure) hPa"
+        let humidity = "\(weatherData.main.humidity) %"
+        let cloudCoverage = "\(weatherData.clouds.all) %"
+        let windSpeed = "\(weatherData.wind.speed) km/h"
+        let pressure = "\(weatherData.main.pressure) hPa"
         
         self.weatherInfoStackView.updateValues(humidity: humidity, cloudCoverage: cloudCoverage, windSpeed: windSpeed, pressure: pressure)
         
+        let cityCoordinates = weatherResponse.city.coord
         if let precipitationMapView = mainView.subviews.compactMap({ $0 as? PrecipitationMapView }).first {
-            precipitationMapView.centerMapOnCoordinates(latitude: weatherResponse.coord.lat, longitude: weatherResponse.coord.lon)
+            precipitationMapView.centerMapOnCoordinates(latitude: cityCoordinates.lat, longitude: cityCoordinates.lon)
+        }
+        
+        horizontalScrollView.clearItems()
+        for weather in weatherResponse.list {
+            let dateTime = weather.dt_txt
+            let time = String(dateTime.suffix(8).prefix(2))
+            let temperature = String(format: "%.1f°", weather.main.temp - 273.15)
+            let icon = UIImage(named: weather.weather.first?.icon ?? "01d")
+            
+            horizontalScrollView.addItem(image: icon, title: time, subtitle: temperature)
+        }
+        
+        fiveDayWeatherView.clearItems()
+        var beforedate = ""
+        
+        for weather in weatherResponse.list {
+            let dateTime = weather.dt_txt
+            let date = String(dateTime.prefix(10))
+            if beforedate != date {
+                beforedate = date
+                let time = String(dateTime.suffix(8).prefix(2))
+                
+                let temperature = String(format: "%.1f°", weather.main.temp - 273.15)
+                
+                let icon = UIImage(named: weather.weather.first?.icon ?? "01d")
+                
+                let minTemp = String(format: "%.1f°", weather.main.temp_min - 273.15)
+                let maxTemp = String(format: "%.1f°", weather.main.temp_max - 273.15)
+                
+                let cell = FiveDayWeatherViewCell(image: icon, date: date, minTemp: minTemp, maxTemp: maxTemp)
+                fiveDayWeatherView.addCell(cell)
+            }
         }
     }
 }

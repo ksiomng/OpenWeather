@@ -8,49 +8,52 @@
 import Foundation
 
 struct WeatherResponse: Codable {
-    let coord: Place
-    let name: String // Replace city with name
-    let weather: [Weather]
-    let main: MainWeatherData
-    let clouds: Clouds
-    let wind: Wind
-    let sys: Sys
-    let dt: Int
-    let visibility: Int
+    let city: CityInfo
+    let list: [WeatherData]
 }
 
-struct Place: Codable {
-    let lon: Double
+struct CityInfo: Codable {
+    let id: Int
+    let name: String
+    let coord: Coordinates
+    let country: String
+}
+
+struct Coordinates: Codable {
     let lat: Double
+    let lon: Double
 }
 
-struct MainWeatherData: Codable {
+struct WeatherData: Codable {
+    let dt: Int
+    let main: MainWeather
+    let weather: [WeatherCondition]
+    let clouds: CloudInfo
+    let wind: WindInfo
+    let dt_txt: String
+}
+
+struct MainWeather: Codable {
     let temp: Double
     let feels_like: Double
     let temp_min: Double
     let temp_max: Double
-    let pressure: Double
-    let humidity: Double
+    let pressure: Int
+    let humidity: Int
 }
 
-struct Weather: Codable {
+struct WeatherCondition: Codable {
     let id: Int
     let main: String
     let description: String
     let icon: String
 }
 
-struct Clouds: Codable {
+struct CloudInfo: Codable {
     let all: Int
 }
 
-struct Wind: Codable {
+struct WindInfo: Codable {
     let speed: Double
     let deg: Int
-    let gust: Double
-}
-
-struct Sys: Codable {
-    let sunrise: Int
-    let sunset: Int
 }

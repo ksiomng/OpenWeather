@@ -99,6 +99,13 @@ class HourlyWeatherScrollView: UIView {
         let item = HourlyWeatherScrollViewCell(image: image, title: title, subtitle: subtitle)
         stackView.addArrangedSubview(item)
     }
+    
+    func clearItems() {
+        stackView.arrangedSubviews.forEach { subview in
+            stackView.removeArrangedSubview(subview)
+            subview.removeFromSuperview()
+        }
+    }
 }
 
 class HourlyWeatherScrollViewCell: UIView {
