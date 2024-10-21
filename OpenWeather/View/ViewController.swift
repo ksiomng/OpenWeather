@@ -61,13 +61,8 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
         return view
     }()
     
-    lazy var weatherInfoStackView: UIView = {
-        let humidity = "60%"
-        let cloudCoverage = "20%"
-        let windSpeed = "15 km/h"
-        let pressure = "1015 hPa"
-        
-        let view = WeatherInfoStackView(humidity: humidity, cloudCoverage: cloudCoverage, windSpeed: windSpeed, pressure: pressure)
+    lazy var weatherInfoStackView: WeatherInfoStackView = {
+        let view = WeatherInfoStackView(humidity: "50%", cloudCoverage: "20%", windSpeed: "10 km/h", pressure: "1013 hPa")
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -84,7 +79,7 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
         let maxMinTemp = "최고: -1°  | 최저: -11°"
         weatherDisplayView.updateWeatherInfo(city: city, temperature: temperature, weatherDescription: weatherDescription, maxMinTemp: maxMinTemp)
         
-        for i in 1...10 {
+        for i in 1...16 {
             let title = "Item \(i)"
             let subtitle = "\(i)°"
             let image = UIImage(named: "01d")
@@ -100,8 +95,7 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
             fiveDayWeatherView.addCell(cell)
         }
         
-        let client_id = Bundle.main.infoDictionary?["API_KEY"] as? String ?? ""
-        print(client_id)
+        tableView.reloadData()
     }
     
     private func setupViews() {
@@ -217,9 +211,12 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "cityCell")
-        cell.textLabel?.text = viewModel.filteredCities[indexPath.row]
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cityCell")
+        let city = viewModel.filteredCities[indexPath.row]
+        cell.textLabel?.text = city.name
+        cell.detailTextLabel?.text = city.country
         cell.textLabel?.textColor = .white
+        cell.detailTextLabel?.textColor = .lightGray
         cell.backgroundColor = UIColor(named: "backgroundColor")
         return cell
     }
@@ -230,6 +227,80 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCity = viewModel.selectedCity(at: indexPath.row)
-        print("Selected city: \(selectedCity)")
+        if let searchController = navigationItem.searchController {
+            searchController.isActive = false
+        }
+        fetchWeather(for: selectedCity)
+    }
+    
+    private func fetchWeather(for city: City) {
+        viewModel.fetchWeather(for: city) { [weak self] result in
+            switch result {
+            case .success(let weatherResponse):
+                DispatchQueue.main.async {
+                    self?.updateWeatherDisplay(with: weatherResponse)
+                }
+            case .failure(let error):
+                print("Failed to fetch weather data: \(error)")
+            }
+        }
+    }
+    
+    private func updateWeatherDisplay(with weatherResponse: WeatherResponse) {
+        guard let weatherData = weatherResponse.list.first else {
+            print("No weather data available.")
+            return
+        }
+        
+        let city = weatherResponse.city.name
+        let temperature = String(format: "%.1f°", weatherData.main.temp - 273.15)
+        let weatherDescription = weatherData.weather.first?.description ?? ""
+        let maxMinTemp = "최고: \(String(format: "%.2f°", weatherData.main.temp_max - 273.15)) | 최저: \(String(format: "%.2f°", weatherData.main.temp_min - 273.15))"
+        
+        weatherDisplayView.updateWeatherInfo(city: city, temperature: temperature, weatherDescription: weatherDescription, maxMinTemp: maxMinTemp)
+        
+        let humidity = "\(weatherData.main.humidity) %"
+        let cloudCoverage = "\(weatherData.clouds.all) %"
+        let windSpeed = "\(weatherData.wind.speed) km/h"
+        let pressure = "\(weatherData.main.pressure) hPa"
+        
+        self.weatherInfoStackView.updateValues(humidity: humidity, cloudCoverage: cloudCoverage, windSpeed: windSpeed, pressure: pressure)
+        
+        let cityCoordinates = weatherResponse.city.coord
+        if let precipitationMapView = mainView.subviews.compactMap({ $0 as? PrecipitationMapView }).first {
+            precipitationMapView.centerMapOnCoordinates(latitude: cityCoordinates.lat, longitude: cityCoordinates.lon)
+        }
+        
+        horizontalScrollView.clearItems()
+        for weather in weatherResponse.list {
+            let dateTime = weather.dt_txt
+            let time = String(dateTime.suffix(8).prefix(2))
+            let temperature = String(format: "%.1f°", weather.main.temp - 273.15)
+            let icon = UIImage(named: weather.weather.first?.icon ?? "01d")
+            
+            horizontalScrollView.addItem(image: icon, title: time, subtitle: temperature)
+        }
+        
+        fiveDayWeatherView.clearItems()
+        var beforedate = ""
+        
+        for weather in weatherResponse.list {
+            let dateTime = weather.dt_txt
+            let date = String(dateTime.prefix(10))
+            if beforedate != date {
+                beforedate = date
+                let time = String(dateTime.suffix(8).prefix(2))
+                
+                let temperature = String(format: "%.1f°", weather.main.temp - 273.15)
+                
+                let icon = UIImage(named: weather.weather.first?.icon ?? "01d")
+                
+                let minTemp = String(format: "%.1f°", weather.main.temp_min - 273.15)
+                let maxTemp = String(format: "%.1f°", weather.main.temp_max - 273.15)
+                
+                let cell = FiveDayWeatherViewCell(image: icon, date: date, minTemp: minTemp, maxTemp: maxTemp)
+                fiveDayWeatherView.addCell(cell)
+            }
+        }
     }
 }
