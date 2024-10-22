@@ -27,7 +27,6 @@ class WeatherViewModel {
         do {
             let data = try Data(contentsOf: url)
             cities = try JSONDecoder().decode([City].self, from: data)
-            print("Loaded cities: \(cities.count)")
         } catch {
             print("Error loading cities: \(error)")
         }
