@@ -95,7 +95,6 @@ class WeatherInfoStackView: UIView {
     
     private let pressureValueLabel: UILabel = {
         let label = UILabel()
-        label.text = "1015 hPa"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 30)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -114,7 +113,7 @@ class WeatherInfoStackView: UIView {
         super.init(frame: .zero)
         setupViews()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -128,7 +127,7 @@ class WeatherInfoStackView: UIView {
         
         WindSpeedView.addSubview(windSpeedTitleLabel)
         WindSpeedView.addSubview(windSpeedValueLabel)
-
+        
         PressureView.addSubview(pressureTitleLabel)
         PressureView.addSubview(pressureValueLabel)
         

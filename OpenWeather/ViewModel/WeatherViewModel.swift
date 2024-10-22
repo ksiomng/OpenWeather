@@ -32,7 +32,7 @@ class WeatherViewModel {
             print("Error loading cities: \(error)")
         }
     }
-
+    
     func filterCities(for query: String) {
         if query.isEmpty {
             filteredCities = cities
@@ -40,11 +40,11 @@ class WeatherViewModel {
             filteredCities = cities.filter { $0.name.lowercased().contains(query.lowercased()) }
         }
     }
-
+    
     func numberOfFilteredCities() -> Int {
         return filteredCities.count
     }
-
+    
     func selectedCity(at index: Int) -> City {
         return filteredCities[index]
     }

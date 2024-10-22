@@ -8,6 +8,13 @@
 import UIKit
 
 class HourlyWeatherScrollView: UIView {
+    
+    var maxWindSpeed: Double? {
+        didSet {
+            updateWindSpeedLabel()
+        }
+    }
+    
     lazy var view: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(named: "backgroundColor")
@@ -25,7 +32,6 @@ class HourlyWeatherScrollView: UIView {
     
     lazy var windSpeedIndicator: UILabel = {
         let label = UILabel()
-        label.text = "돌풍의 풍속은 최대 7m/s 입니다."
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 12)
@@ -93,6 +99,16 @@ class HourlyWeatherScrollView: UIView {
             stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             stackView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
         ])
+        
+        updateWindSpeedLabel()
+    }
+    
+    private func updateWindSpeedLabel() {
+        if let speed = maxWindSpeed {
+            windSpeedIndicator.text = "돌풍의 풍속은 최대 \(speed)m/s 입니다."
+        } else {
+            windSpeedIndicator.text = "돌풍의 풍속 정보가 없습니다."
+        }
     }
     
     func addItem(image: UIImage?, title: String, subtitle: String) {
@@ -107,6 +123,7 @@ class HourlyWeatherScrollView: UIView {
         }
     }
 }
+
 
 class HourlyWeatherScrollViewCell: UIView {
     
@@ -150,19 +167,19 @@ class HourlyWeatherScrollViewCell: UIView {
         addSubview(timeLabel)
         addSubview(iconImageView)
         addSubview(temperatureLabel)
-
+        
         let itemWidth: CGFloat = 60
         NSLayoutConstraint.activate([
             self.widthAnchor.constraint(equalToConstant: itemWidth),
             
             timeLabel.topAnchor.constraint(equalTo: self.topAnchor),
             timeLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-
+            
             iconImageView.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 5),
             iconImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             iconImageView.widthAnchor.constraint(equalToConstant: 30),
             iconImageView.heightAnchor.constraint(equalToConstant: 30),
-
+            
             temperatureLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 7),
             temperatureLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             temperatureLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)

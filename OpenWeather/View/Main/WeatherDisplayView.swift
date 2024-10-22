@@ -95,7 +95,7 @@ class WeatherDisplayView: UIView {
         stackView.addSubview(tempView)
         stackView.addSubview(weatherView)
         stackView.addSubview(maxminTempView)
-
+        
         NSLayoutConstraint.activate([
             cityMainView.topAnchor.constraint(equalTo: stackView.topAnchor, constant: 6),
             cityMainView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
@@ -104,11 +104,11 @@ class WeatherDisplayView: UIView {
             tempView.topAnchor.constraint(equalTo: cityMainView.bottomAnchor, constant: 7),
             tempView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             tempView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
-
+            
             weatherView.topAnchor.constraint(equalTo: tempView.bottomAnchor, constant: 4),
             weatherView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             weatherView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
-
+            
             maxminTempView.topAnchor.constraint(equalTo: weatherView.bottomAnchor, constant: 2),
             maxminTempView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
             maxminTempView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),

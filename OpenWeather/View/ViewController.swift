@@ -21,7 +21,6 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
     
     lazy var imageView: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "sunny")
         image.translatesAutoresizingMaskIntoConstraints = false
         image.contentMode = .scaleAspectFill
         return image
@@ -73,27 +72,8 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
         setupViews()
         setupSearchController()
         
-        let city = "Seoul"
-        let temperature = "-7°"
-        let weatherDescription = "맑음"
-        let maxMinTemp = "최고: -1°  | 최저: -11°"
-        weatherDisplayView.updateWeatherInfo(city: city, temperature: temperature, weatherDescription: weatherDescription, maxMinTemp: maxMinTemp)
-        
-        for i in 1...16 {
-            let title = "Item \(i)"
-            let subtitle = "\(i)°"
-            let image = UIImage(named: "01d")
-            horizontalScrollView.addItem(image: image, title: title, subtitle: subtitle)
-        }
-        
-        for i in 1...5 {
-            let date = "Day \(i)"
-            let minTemp = "\(10 - i)°"
-            let maxTemp = "\(15 - i)°"
-            let image = UIImage(named: "01d")
-            let cell = FiveDayWeatherViewCell(image: image, date: date, minTemp: minTemp, maxTemp: maxTemp)
-            fiveDayWeatherView.addCell(cell)
-        }
+        let seoul = City(id: 1835848, name: "Seoul", country: "KR", coord: City.Coordinates(lon: 126.9780, lat: 37.5665))
+        fetchWeather(for: seoul)
         
         tableView.reloadData()
     }
@@ -283,18 +263,18 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
         
         fiveDayWeatherView.clearItems()
         var beforedate = ""
+        var dayCounter = 0
         
         for weather in weatherResponse.list {
             let dateTime = weather.dt_txt
             let date = String(dateTime.prefix(10))
-            if beforedate != date {
+            
+            if beforedate != date && dayCounter < 5 {
                 beforedate = date
-                let time = String(dateTime.suffix(8).prefix(2))
+                dayCounter += 1
                 
                 let temperature = String(format: "%.1f°", weather.main.temp - 273.15)
-                
                 let icon = UIImage(named: weather.weather.first?.icon ?? "01d")
-                
                 let minTemp = String(format: "%.1f°", weather.main.temp_min - 273.15)
                 let maxTemp = String(format: "%.1f°", weather.main.temp_max - 273.15)
                 
@@ -302,5 +282,10 @@ class ViewController: UIViewController, UISearchResultsUpdating, UITableViewDele
                 fiveDayWeatherView.addCell(cell)
             }
         }
+        
+        horizontalScrollView.maxWindSpeed = weatherData.wind.speed
+        
+        let backgroundImage = (weatherData.weather.first?.main ?? "").lowercased()
+        imageView.image = UIImage(named: backgroundImage)
     }
 }
